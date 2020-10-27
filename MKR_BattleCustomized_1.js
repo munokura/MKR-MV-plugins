@@ -20,7 +20,8 @@
 //===============================================================================
 
 /*:
- * ==============================================================================
+ * @target MZ MV
+ * @url https://raw.githubusercontent.com/munokura/MKR-MV-plugins/master/MKR_BattleCustomized_1.js
  * @plugindesc (v1.0.3) バトルシーンカスタマイズプラグインその1
  * @author マンカインド
  *
@@ -58,8 +59,6 @@
  *     可能性がありますが、
  *     バージョンアップにより本プラグインの仕様が変更される可能性があります。
  *     ご了承ください。
- *
- * ==============================================================================
 */
 
 var Imported = Imported || {};
@@ -76,11 +75,11 @@ Imported.MKR_BattleCustomized_1 = true;
     //
     //=========================================================================
     const _Sprite_Actor_updateTargetPosition = Sprite_Actor.prototype.updateTargetPosition;
-    Sprite_Actor.prototype.updateTargetPosition = function() {
+    Sprite_Actor.prototype.updateTargetPosition = function () {
         _Sprite_Actor_updateTargetPosition.call(this);
         if (this._actor.isInputting()) {
             this.stepBack();
-        } else if(this._actor.isActing()) {
+        } else if (this._actor.isActing()) {
             this.stepForward();
         } else if (this._actor.canMove() && BattleManager.isEscaped()) {
             this.retreat();
@@ -96,10 +95,10 @@ Imported.MKR_BattleCustomized_1 = true;
     //
     //=========================================================================
     const _BattleManager_changeActor = BattleManager.changeActor;
-    BattleManager.changeActor = function(newActorIndex, lastActorActionState) {
+    BattleManager.changeActor = function (newActorIndex, lastActorActionState) {
         _BattleManager_changeActor.apply(this, arguments);
 
-        if(Imported.YEP_BattleEngineCore) {
+        if (Imported.YEP_BattleEngineCore) {
             this._actorIndex = newActorIndex;
             let newActor = this.actor();
             if (newActor) {
@@ -116,14 +115,14 @@ Imported.MKR_BattleCustomized_1 = true;
     //
     //=========================================================================
     const _Scene_Battle_startActorCommandSelection = Scene_Battle.prototype.startActorCommandSelection;
-    Scene_Battle.prototype.startActorCommandSelection = function() {
+    Scene_Battle.prototype.startActorCommandSelection = function () {
         _Scene_Battle_startActorCommandSelection.call(this);
-        if(Imported.YEP_X_BattleSysATB) {
+        if (Imported.YEP_X_BattleSysATB) {
             if (BattleManager.isATB()) {
                 BattleManager.actor().spriteReturnHome();
             }
         }
-        if(Imported.YEP_X_BattleSysCTB) {
+        if (Imported.YEP_X_BattleSysCTB) {
             if (BattleManager.isCTB()) {
                 BattleManager.actor().spriteReturnHome();
             }

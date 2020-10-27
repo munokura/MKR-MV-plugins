@@ -14,7 +14,8 @@
 //===============================================================================
 
 /*:
- * ==============================================================================
+ * @target MZ MV
+ * @url https://raw.githubusercontent.com/munokura/MKR-MV-plugins/master/MKR_FollowerLimit.js
  * @plugindesc (v1.0.0) 隊列人数制限プラグイン
  * @author マンカインド
  *
@@ -48,8 +49,6 @@
  *     バージョンアップにより本プラグインの仕様が変更される可能性があります。
  *     ご了承ください。
  *
- * ==============================================================================
- *
  * @param follower_limit
  * @text 隊列人数
  * @desc プレイヤーの後ろに表示される仲間の数を指定します。(デフォルト:3)
@@ -67,15 +66,15 @@ Imported.MKR_FollowerLimit = true;
 
     const PN = "MKR_FollowerLimit";
 
-    const CheckParam = function(type, name, value, def, min, max, options) {
-        if(min == undefined || min == null) {
+    const CheckParam = function (type, name, value, def, min, max, options) {
+        if (min == undefined || min == null) {
             min = -Infinity;
         }
-        if(max == undefined || max == null) {
+        if (max == undefined || max == null) {
             max = Infinity;
         }
 
-        if(value == null) {
+        if (value == null) {
             value = "";
         } else {
             value = String(value);
@@ -84,12 +83,12 @@ Imported.MKR_FollowerLimit = true;
         value = value.replace(/\\/g, '\x1b');
         value = value.replace(/\x1b\x1b/g, '\\');
 
-        switch(type) {
+        switch (type) {
             case "num":
-                if(value == "") {
-                    value = (isFinite(def))? parseInt(def, 10) : 0;
+                if (value == "") {
+                    value = (isFinite(def)) ? parseInt(def, 10) : 0;
                 } else {
-                    value = (isFinite(value))? parseInt(value, 10) : (isFinite(def))? parseInt(def, 10) : 0;
+                    value = (isFinite(value)) ? parseInt(value, 10) : (isFinite(def)) ? parseInt(def, 10) : 0;
                     value = value.clamp(min, max);
                 }
                 break;
@@ -101,11 +100,11 @@ Imported.MKR_FollowerLimit = true;
         return value;
     };
 
-    const paramParse = function(obj) {
+    const paramParse = function (obj) {
         return JSON.parse(JSON.stringify(obj, paramReplace));
     }
 
-    const paramReplace = function(key, value) {
+    const paramReplace = function (key, value) {
         try {
             return JSON.parse(value || null);
         } catch (e) {
@@ -115,7 +114,7 @@ Imported.MKR_FollowerLimit = true;
 
     const Parameters = paramParse(PluginManager.parameters(PN));
     const Params = {
-        "FollwerLimit" : CheckParam("num", "隊列人数", Parameters["follower_limit"], 3, 0),
+        "FollwerLimit": CheckParam("num", "隊列人数", Parameters["follower_limit"], 3, 0),
     };
 
 
@@ -125,25 +124,25 @@ Imported.MKR_FollowerLimit = true;
     //
     //=========================================================================
     const _Game_Followers_initialize = Game_Followers.prototype.initialize;
-    Game_Followers.prototype.initialize = function() {
+    Game_Followers.prototype.initialize = function () {
         _Game_Followers_initialize.call(this);
         this.followerExtended();
     };
 
-    Game_Followers.prototype.followerExtended = function() {
+    Game_Followers.prototype.followerExtended = function () {
         let limit, i, cnt;
         limit = this._data.length - Params.FollwerLimit;
         i = 0;
         cnt = this._data.length + 1;
 
-        if(limit > 0) {
+        if (limit > 0) {
             limit = Math.abs(limit);
-            for(i; i < limit; i++) {
+            for (i; i < limit; i++) {
                 this._data.pop();
             }
         } else {
             limit = Math.abs(limit);
-            for(i; i < limit; i++) {
+            for (i; i < limit; i++) {
                 this._data.push(new Game_Follower(cnt++));
             }
         }
@@ -156,7 +155,7 @@ Imported.MKR_FollowerLimit = true;
     //
     //=========================================================================
     const _Game_Follower_actor = Game_Follower.prototype.actor;
-    Game_Follower.prototype.actor = function() {
+    Game_Follower.prototype.actor = function () {
         let ret = _Game_Follower_actor.call(this);
         return $gameParty.allMembers()[this._memberIndex];
     };
@@ -169,7 +168,7 @@ Imported.MKR_FollowerLimit = true;
     //
     //=========================================================================
     const _DataManager_extractSaveContents = DataManager.extractSaveContents;
-    DataManager.extractSaveContents = function(contents) {
+    DataManager.extractSaveContents = function (contents) {
         _DataManager_extractSaveContents.call(this, contents);
         // 処理を追記
         $gamePlayer.followers().followerExtended();

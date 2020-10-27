@@ -26,6 +26,8 @@
 
 /*:
  *
+ * @target MZ MV
+ * @url https://raw.githubusercontent.com/munokura/MKR-MV-plugins/master/MKR_LevelUpMessageEx.js
  * @plugindesc (v2.0.1) レベルアップメッセージ拡張
  *
  * @author マンカインド
@@ -158,37 +160,37 @@
  * @default 2
  *
 */
-(function() {
+(function () {
     'use strict';
 
     const PN = "MKR_LevelUpMessageEx";
 
-    const CheckParam = function(type, name, value, def, min, max, options) {
-        if(min == undefined || min == null) {
+    const CheckParam = function (type, name, value, def, min, max, options) {
+        if (min == undefined || min == null) {
             min = -Infinity;
         }
-        if(max == undefined || max == null) {
+        if (max == undefined || max == null) {
             max = Infinity;
         }
 
-        if(value == null) {
+        if (value == null) {
             value = "";
         } else {
             value = String(value);
         }
 
-        switch(type) {
+        switch (type) {
             case "bool":
-                if(value == "") {
+                if (value == "") {
                     value = (def) ? "true" : "false";
                 }
                 value = value.toUpperCase() === "ON" || value.toUpperCase() === "TRUE" || value.toUpperCase() === "1";
                 break;
             case "switch":
-                if(value == "") {
+                if (value == "") {
                     value = (def != "") ? def : value;
                 }
-                if(!value.match(/^([A-D]|\d+)$/i)) {
+                if (!value.match(/^([A-D]|\d+)$/i)) {
                     throw new Error("[CheckParam] " + param + "の値がスイッチではありません: " + param + " : " + value);
                 }
                 break;
@@ -199,14 +201,14 @@
         return value;
     };
 
-    const paramParse = function(obj) {
+    const paramParse = function (obj) {
         return JSON.parse(JSON.stringify(obj, paramReplace));
     };
 
-    const paramReplace = function(key, value) {
+    const paramReplace = function (key, value) {
         try {
             return JSON.parse(value || null);
-        } catch(e) {
+        } catch (e) {
             return value;
         }
     };
@@ -231,7 +233,7 @@
     //  ・現在シーンがScene_Battleであることを判定する処理を定義します。
     //
     //=========================================================================
-    SceneManager.isSceneBattle = function() {
+    SceneManager.isSceneBattle = function () {
         return this._scene.constructor === Scene_Battle;
     };
 
@@ -242,7 +244,7 @@
     //
     //=========================================================================
     const _Game_Actor_displayLevelUp = Game_Actor.prototype.displayLevelUp;
-    Game_Actor.prototype.displayLevelUp = function(newSkills) {
+    Game_Actor.prototype.displayLevelUp = function (newSkills) {
         let visibleFace = DefVisibleFace;
         let messageSpeed = DefMessageSpeed;
         let statusMess = DefStatusMess;
@@ -251,14 +253,14 @@
         let faceIndex = this.faceIndex();
 
         // 機能無効時は元の処理を呼び出す
-        if(!statusMess) {
+        if (!statusMess) {
             _Game_Actor_displayLevelUp.apply(this, arguments);
             return;
         }
 
         // メッセージ顔グラフィック設定(バトル)
         // バトル終了後のレベルアップはテキスト末尾に制御文字を追加する。
-        if($gameSwitches.value(visibleFace) && SceneManager.isSceneBattle()) {
+        if ($gameSwitches.value(visibleFace) && SceneManager.isSceneBattle()) {
             $gameMessage.add("\\af[%1,%2]".format(faceName, faceIndex));
         }
 
@@ -269,16 +271,16 @@
         let cnt = this.currentClass().params.length;
 
         let j = 0;
-        for(let i = 0; i < cnt; i++) {
-            if(viewParams[i]) {
+        for (let i = 0; i < cnt; i++) {
+            if (viewParams[i]) {
                 let paramName = TextManager.param(i);
                 let prevParam = this.currentClass().params[i][this._level - 1];
                 let currentParam = this.currentClass().params[i][this._level];
 
                 text += "%1 %2 ⇒ %3".format(paramName, prevParam, currentParam);
 
-                if(j < cnt - 1) {
-                    if(j % 2) {
+                if (j < cnt - 1) {
+                    if (j % 2) {
                         text += "\n";
                     } else {
                         text += "　";
@@ -292,14 +294,14 @@
         $gameMessage.add(text);
 
         // メッセージ速度設定(デフォルト or 一瞬)
-        if($gameSwitches.value(messageSpeed)) {
+        if ($gameSwitches.value(messageSpeed)) {
             let mesArr = $gameMessage.allText().split("\n");
             $gameMessage.clear();
             $gameMessage.newPage();
             let cnt = mesArr.length;
-            for(let i = 0; i < cnt; i++) {
+            for (let i = 0; i < cnt; i++) {
                 let text = mesArr[i];
-                if(mesArr[i].indexOf("\\>") === -1) {
+                if (mesArr[i].indexOf("\\>") === -1) {
                     text = "\\>" + mesArr[i];
                 }
                 $gameMessage.add(text);
@@ -308,7 +310,7 @@
 
         // メッセージ顔グラフィック設定(バトル以外)
         // マップ上でのレベルアップを想定、顔グラフィックをスクリプトでセットする。
-        if($gameSwitches.value(visibleFace) && !SceneManager.isSceneBattle()) {
+        if ($gameSwitches.value(visibleFace) && !SceneManager.isSceneBattle()) {
             $gameMessage.setFaceImage(faceName, faceIndex);
         }
     };
@@ -319,10 +321,10 @@
     //  ・テキストを末尾に追加する処理を定義します。
     //
     //=========================================================================
-    Game_Message.prototype.pushText = function(addText) {
+    Game_Message.prototype.pushText = function (addText) {
         let index = this._texts.length - 1;
         // テキスト配列が空の場合は通常のテキスト追加処理
-        if(index < 0) {
+        if (index < 0) {
             this.add(addText);
             return;
         }
@@ -339,11 +341,11 @@
     //
     //=========================================================================
     const _Window_Message_obtainEscapeCode = Window_Message.prototype.obtainEscapeCode;
-    Window_Message.prototype.obtainEscapeCode = function(textState) {
+    Window_Message.prototype.obtainEscapeCode = function (textState) {
         // 機能無効時は元の処理を呼び出す
         let statusMess = DefStatusMess;
         let visibleFace = DefVisibleFace;
-        if(!$gameSwitches.value(visibleFace) || !statusMess) {
+        if (!$gameSwitches.value(visibleFace) || !statusMess) {
             return _Window_Message_obtainEscapeCode.apply(this, arguments);
         }
 
@@ -352,7 +354,7 @@
         let text = textState.text.slice(textState.index);
         let arr = regExp.exec(text);
 
-        if(arr) {
+        if (arr) {
             textState.index += arr[0].length;
             return arr[0];
         } else {
@@ -362,22 +364,22 @@
     };
 
     const _Window_Message_processEscapeCharacter = Window_Message.prototype.processEscapeCharacter;
-    Window_Message.prototype.processEscapeCharacter = function(code, textState) {
+    Window_Message.prototype.processEscapeCharacter = function (code, textState) {
         // 機能無効時は元の処理を呼び出す
         let statusMess = DefStatusMess;
         let visibleFace = DefVisibleFace;
-        if(!$gameSwitches.value(visibleFace) || !statusMess) {
+        if (!$gameSwitches.value(visibleFace) || !statusMess) {
             return _Window_Message_processEscapeCharacter.apply(this, arguments);
         }
 
         let regExp = /^(AF)(\[.*?\])?$/i;
         let arr = regExp.exec(code);
 
-        if(arr) {
-            if(arr[2]) {
+        if (arr) {
+            if (arr[2]) {
                 arr[2] = arr[2].replace(/[\[\]]/g, "");
             }
-            switch(arr[1].toUpperCase()) {
+            switch (arr[1].toUpperCase()) {
                 case "AF":
                     let faceName = arr[2].split(",")[0];
                     let faceIndex = arr[2].split(",")[1];

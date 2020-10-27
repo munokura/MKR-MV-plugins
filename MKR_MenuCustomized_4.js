@@ -15,6 +15,8 @@
 
 /*:
  *
+ * @target MZ MV
+ * @url https://raw.githubusercontent.com/munokura/MKR-MV-plugins/master/MKR_MenuCustomized_4.js
  * @plugindesc (v1.0.0) メニューカスタマイズプラグインその4
  * @author マンカインド
  *
@@ -71,8 +73,8 @@ Imported.MKR_MenuCustomized_4 = true;
     //
     //=========================================================================
     var _Window_ItemList_processOk = Window_ItemList.prototype.processOk;
-    Window_ItemList.prototype.processOk = function() {
-        if(SceneManager._scene.constructor != Scene_Item) {
+    Window_ItemList.prototype.processOk = function () {
+        if (SceneManager._scene.constructor != Scene_Item) {
             _Window_ItemList_processOk.call(this);
         }
     };

@@ -16,7 +16,8 @@
 //===============================================================================
 
 /*:
- * ==============================================================================
+ * @target MZ MV
+ * @url https://raw.githubusercontent.com/munokura/MKR-MV-plugins/master/MKR_ActorShadowCustomize.js
  * @plugindesc (v1.1.0) アクターシャドウカスタマイズ
  * @author マンカインド
  *
@@ -85,10 +86,7 @@
  *     可能性がありますが、
  *     バージョンアップにより本プラグインの仕様が変更される可能性があります。
  *     ご了承ください。
- *
- * ==============================================================================
- *
-*/
+ */
 
 var Imported = Imported || {};
 Imported.MKR_ActorShadowCustomize = true;
@@ -99,23 +97,23 @@ Imported.MKR_ActorShadowCustomize = true;
     const PN = "MKR_ActorShadowCustomize";
 
 
-    const GetMeta = function(meta, name, sep) {
+    const GetMeta = function (meta, name, sep) {
         let value, values, i, count;
         value = "";
         values = [];
         name = name.toLowerCase().trim();
 
-        Object.keys(meta).forEach(function(key) {
-            if(key.toLowerCase().trim() == name) {
+        Object.keys(meta).forEach(function (key) {
+            if (key.toLowerCase().trim() == name) {
                 value = meta[key].trim();
                 return false;
             }
         });
 
-        if(sep !== undefined && sep != "" && value != "") {
+        if (sep !== undefined && sep != "" && value != "") {
             values = value.split(sep);
             count = values.length;
-            values = values.map(function(elem) {
+            values = values.map(function (elem) {
                 return elem.trim();
             });
 
@@ -132,62 +130,62 @@ Imported.MKR_ActorShadowCustomize = true;
     //
     //=========================================================================
     const _Sprite_Actor_setBattler = Sprite_Actor.prototype.setBattler;
-    Sprite_Actor.prototype.setBattler = function(battler) {
+    Sprite_Actor.prototype.setBattler = function (battler) {
         let actor = this._actor;
 
         _Sprite_Actor_setBattler.call(this, battler);
 
         if (battler !== actor) {
             this.opacityShadowSprite();
-            if(this._shadowSprite && this._shadowSprite.opacity > 0) {
+            if (this._shadowSprite && this._shadowSprite.opacity > 0) {
                 this.positionShadowSprite();
                 this.resizeShadowSprite();
             }
         }
     };
 
-    Sprite_Actor.prototype.positionShadowSprite = function() {
-        if(!this._actor) {
+    Sprite_Actor.prototype.positionShadowSprite = function () {
+        if (!this._actor) {
             return;
         }
 
         let offsetX, offsetY;
-        offsetX = GetMeta(this._actor.actor().meta,"shadowOffsetX");
-        offsetY = GetMeta(this._actor.actor().meta,"shadowOffsetY");
+        offsetX = GetMeta(this._actor.actor().meta, "shadowOffsetX");
+        offsetY = GetMeta(this._actor.actor().meta, "shadowOffsetY");
 
-        if(offsetX && isFinite(offsetX)) {
+        if (offsetX && isFinite(offsetX)) {
             this._shadowSprite.x += offsetX * 1;
         }
-        if(offsetY && isFinite(offsetY)) {
+        if (offsetY && isFinite(offsetY)) {
             this._shadowSprite.y += offsetY * 1;
         }
     };
 
-    Sprite_Actor.prototype.resizeShadowSprite = function() {
-        if(!this._actor) {
+    Sprite_Actor.prototype.resizeShadowSprite = function () {
+        if (!this._actor) {
             return;
         }
 
         let scaleX, scaleY;
-        scaleX = GetMeta(this._actor.actor().meta,"shadowScaleX");
-        scaleY = GetMeta(this._actor.actor().meta,"shadowScaleY");
+        scaleX = GetMeta(this._actor.actor().meta, "shadowScaleX");
+        scaleY = GetMeta(this._actor.actor().meta, "shadowScaleY");
 
         this._shadowSprite.bitmap.smooth = true;
-        if(scaleX && isFinite(scaleX) && scaleX > 0) {
+        if (scaleX && isFinite(scaleX) && scaleX > 0) {
             this._shadowSprite.scale.x = scaleX * 1.0;
         }
-        if(scaleY && isFinite(scaleY) && scaleY > 0) {
+        if (scaleY && isFinite(scaleY) && scaleY > 0) {
             this._shadowSprite.scale.y = scaleY * 1.0;
         }
     };
 
-    Sprite_Actor.prototype.opacityShadowSprite = function() {
-        if(!this._actor || !this._shadowSprite) {
+    Sprite_Actor.prototype.opacityShadowSprite = function () {
+        if (!this._actor || !this._shadowSprite) {
             return;
         }
 
         let opacity;
-        opacity = GetMeta(this._actor.actor().meta,"shadowOpacity");
+        opacity = GetMeta(this._actor.actor().meta, "shadowOpacity");
         opacity = (opacity === "" || !isFinite(opacity)) ? 255 : Number(opacity);
 
         if (opacity >= 0 && opacity <= 255) {

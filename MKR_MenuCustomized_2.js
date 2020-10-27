@@ -18,6 +18,8 @@
 
 /*:
  *
+ * @target MZ MV
+ * @url https://raw.githubusercontent.com/munokura/MKR-MV-plugins/master/MKR_MenuCustomized_2.js
  * @plugindesc (v1.0.1) メニューカスタマイズプラグインその2
  * @author マンカインド
  *
@@ -62,22 +64,37 @@
  *
  *
  * @param Menu_ItemList_Cols
+ * @text メニュー→アイテム列数
+ * @type number
+ * @min 1
  * @desc メニュー→アイテムリストの列数を指定します。(デフォルト:1)
  * @default 1
  *
  * @param Menu_SkillList_Cols
+ * @text メニュー→スキル列数
+ * @type number
+ * @min 1
  * @desc メニュー→スキルリストの列数を指定します。(デフォルト:1)
  * @default 1
  *
  * @param Battle_ItemList_Cols
+ * @text バトル→アイテム列数
+ * @type number
+ * @min 1
  * @desc バトル→アイテムリストの列数を指定します。(デフォルト:1)
  * @default 1
  *
  * @param Battle_SkillList_Cols
+ * @text バトル→スキル列数
+ * @type number
+ * @min 1
  * @desc バトル→スキルリストの列数を指定します。(デフォルト:1)
  * @default 1
  *
  * @param Map_ItemList_Cols
+ * @text 「アイテム選択の処理」列数
+ * @type number
+ * @min 1
  * @desc マップ→「アイテム選択の処理」リストの列数を指定します。(デフォルト:1)
  * @default 1
  *
@@ -91,29 +108,29 @@ Imported.MKR_MenuCustomized_2 = true;
     var PN, Params;
     PN = "MKR_MenuCustomized_2";
 
-    var CheckParam = function(type, param, def, min, max) {
+    var CheckParam = function (type, param, def, min, max) {
         var Parameters, regExp, value;
         Parameters = PluginManager.parameters(PN);
 
-        if(arguments.length < 4) {
+        if (arguments.length < 4) {
             min = -Infinity;
             max = Infinity;
         }
-        if(arguments.length < 5) {
+        if (arguments.length < 5) {
             max = Infinity;
         }
-        if(param in Parameters) {
+        if (param in Parameters) {
             value = String(Parameters[param]);
         } else {
             throw new Error("[CheckParam] プラグインパラメーターがありません: " + param);
         }
 
-        switch(type) {
+        switch (type) {
             case "num":
-                if(value == "") {
-                    value = (isFinite(def))? parseInt(def, 10) : 0;
+                if (value == "") {
+                    value = (isFinite(def)) ? parseInt(def, 10) : 0;
                 } else {
-                    value = (isFinite(value))? parseInt(value, 10) : (isFinite(def))? parseInt(def, 10) : 0;
+                    value = (isFinite(value)) ? parseInt(value, 10) : (isFinite(def)) ? parseInt(def, 10) : 0;
                     value = value.clamp(min, max);
                 }
                 break;
@@ -126,11 +143,11 @@ Imported.MKR_MenuCustomized_2 = true;
     }
 
     Params = {
-        "MenuIListCols" : CheckParam("num", "Menu_ItemList_Cols", 1, 0),
-        "MenuSListCols" : CheckParam("num", "Menu_SkillList_Cols", 1, 0),
-        "BattleIListCols" : CheckParam("num", "Battle_ItemList_Cols", 1, 0),
-        "BattleSListCols" : CheckParam("num", "Battle_SkillList_Cols", 1, 0),
-        "MapIListCols" : CheckParam("num", "Map_ItemList_Cols", 1, 0),
+        "MenuIListCols": CheckParam("num", "Menu_ItemList_Cols", 1, 0),
+        "MenuSListCols": CheckParam("num", "Menu_SkillList_Cols", 1, 0),
+        "BattleIListCols": CheckParam("num", "Battle_ItemList_Cols", 1, 0),
+        "BattleSListCols": CheckParam("num", "Battle_SkillList_Cols", 1, 0),
+        "MapIListCols": CheckParam("num", "Map_ItemList_Cols", 1, 0),
     };
 
 
@@ -140,7 +157,7 @@ Imported.MKR_MenuCustomized_2 = true;
     //
     //=========================================================================
     var _Window_SkillList_maxCols = Window_SkillList.prototype.maxCols;
-    Window_SkillList.prototype.maxCols = function() {
+    Window_SkillList.prototype.maxCols = function () {
         return Params.MenuSListCols[0];
     };
 
@@ -151,7 +168,7 @@ Imported.MKR_MenuCustomized_2 = true;
     //
     //=========================================================================
     var _Window_ItemList_maxCols = Window_ItemList.prototype.maxCols;
-    Window_ItemList.prototype.maxCols = function() {
+    Window_ItemList.prototype.maxCols = function () {
         return Params.MenuIListCols[0];
     };
 
@@ -161,7 +178,7 @@ Imported.MKR_MenuCustomized_2 = true;
     //  ・バトルシーンのスキルリストウィンドウを再定義します。
     //
     //=========================================================================
-    Window_BattleSkill.prototype.maxCols = function() {
+    Window_BattleSkill.prototype.maxCols = function () {
         return Params.BattleSListCols[0];
     };
 
@@ -171,7 +188,7 @@ Imported.MKR_MenuCustomized_2 = true;
     //  ・バトルシーンのアイテムリストウィンドウを再定義します。
     //
     //=========================================================================
-    Window_BattleItem.prototype.maxCols = function() {
+    Window_BattleItem.prototype.maxCols = function () {
         return Params.BattleIListCols[0];
     };
 
@@ -182,7 +199,7 @@ Imported.MKR_MenuCustomized_2 = true;
     //    アイテムリストウィンドウを再定義します。
     //
     //=========================================================================
-    Window_EventItem.prototype.maxCols = function() {
+    Window_EventItem.prototype.maxCols = function () {
         return Params.MapIListCols[0];
     };
 

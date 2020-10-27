@@ -16,7 +16,8 @@
 //===============================================================================
 
 /*:
- * ==============================================================================
+ * @target MZ MV
+ * @url https://raw.githubusercontent.com/munokura/MKR-MV-plugins/master/MKR_LearnActorSkill.js
  * @plugindesc (v1.0.1) アクター毎スキル習得
  * @author マンカインド
  *
@@ -91,8 +92,6 @@
  *     可能性がありますが、
  *     バージョンアップにより本プラグインの仕様が変更される可能性があります。
  *     ご了承ください。
- *
- * ==============================================================================
 */
 
 var Imported = Imported || {};
@@ -104,7 +103,7 @@ Imported.MKR_learnActorSkill = true;
     // const PN = "MKR_LearnActorSkill";
 
     const Regex = {
-        actorSkills : /<(?:actorskills_)(\d+)[ :]+([0-9, ]*)?>/i,
+        actorSkills: /<(?:actorskills_)(\d+)[ :]+([0-9, ]*)?>/i,
     };
 
 
@@ -114,7 +113,7 @@ Imported.MKR_learnActorSkill = true;
     //
     //=========================================================================
     const _Game_Actor_skills = Game_Actor.prototype.skills;
-    Game_Actor.prototype.skills = function() {
+    Game_Actor.prototype.skills = function () {
         let ret;
         ret = _Game_Actor_skills.call(this);
         ret = this.learnEquipSkill(ret);
@@ -123,30 +122,30 @@ Imported.MKR_learnActorSkill = true;
         return ret;
     };
 
-    Game_Actor.prototype.learnEquipSkill = function(ret) {
+    Game_Actor.prototype.learnEquipSkill = function (ret) {
         let id, notes, pattern, m, skills, actorId;
         actorId = this.actorId();
 
-        this.equips().forEach(function(item) {
-            if(!item || item.note == "") {
+        this.equips().forEach(function (item) {
+            if (!item || item.note == "") {
                 return false;
             }
             notes = item.note.split(/ ?(?=<)/);
-            notes.forEach(function(note, i) {
+            notes.forEach(function (note, i) {
                 note = note.trim();
-                if(!Regex.actorSkills.test(note)) {
+                if (!Regex.actorSkills.test(note)) {
                     return false;
                 }
                 m = note.match(Regex.actorSkills);
                 m[1] = m[1].trim();
                 m[2] = m[2].trim();
                 id = isFinite(m[1]) ? parseInt(m[1], 10) : 0;
-                skills = m[2].split(",").map(function(num) {
+                skills = m[2].split(",").map(function (num) {
                     return isFinite(num.trim()) ? parseInt(num.trim(), 10) : 0;
                 });
-                if(id == actorId) {
-                    skills.forEach(function(skill) {
-                        if(skill > 0 && $dataSkills[skill] && !ret.contains($dataSkills[skill])) {
+                if (id == actorId) {
+                    skills.forEach(function (skill) {
+                        if (skill > 0 && $dataSkills[skill] && !ret.contains($dataSkills[skill])) {
                             ret.push($dataSkills[skill]);
                         }
                     });
@@ -157,30 +156,30 @@ Imported.MKR_learnActorSkill = true;
         return ret;
     };
 
-    Game_Actor.prototype.learnStateSkill = function(ret) {
+    Game_Actor.prototype.learnStateSkill = function (ret) {
         let id, notes, pattern, m, skills, actorId;
         actorId = this.actorId();
 
-        this.states().forEach(function(item) {
-            if(!item || item.note == "") {
+        this.states().forEach(function (item) {
+            if (!item || item.note == "") {
                 return false;
             }
             notes = item.note.split(/ ?(?=<)/);
-            notes.forEach(function(note, i) {
+            notes.forEach(function (note, i) {
                 note = note.trim();
-                if(!Regex.actorSkills.test(note)) {
+                if (!Regex.actorSkills.test(note)) {
                     return false;
                 }
                 m = note.match(Regex.actorSkills);
                 m[1] = m[1].trim();
                 m[2] = m[2].trim();
                 id = isFinite(m[1]) ? parseInt(m[1], 10) : 0;
-                skills = m[2].split(",").map(function(num) {
+                skills = m[2].split(",").map(function (num) {
                     return isFinite(num.trim()) ? parseInt(num.trim(), 10) : 0;
                 });
-                if(id == actorId) {
-                    skills.forEach(function(skill) {
-                        if(skill > 0 && $dataSkills[skill] && !ret.contains($dataSkills[skill])) {
+                if (id == actorId) {
+                    skills.forEach(function (skill) {
+                        if (skill > 0 && $dataSkills[skill] && !ret.contains($dataSkills[skill])) {
                             ret.push($dataSkills[skill]);
                         }
                     });
