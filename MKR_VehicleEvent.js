@@ -16,6 +16,8 @@
 
 /*:
  *
+ * @target MZ MV
+ * @url https://raw.githubusercontent.com/munokura/MKR-MV-plugins/master/MKR_VehicleEvent.js
  * @plugindesc (v1.0.1) 乗り物イベントプラグイン
  * @author マンカインド
  *
@@ -83,19 +85,19 @@ Imported.MKR_VehicleEvent = true;
     //
     //=========================================================================
     var _Game_CharacterBase_canPass = Game_CharacterBase.prototype.canPass;
-    Game_CharacterBase.prototype.canPass = function(x, y, d) {
+    Game_CharacterBase.prototype.canPass = function (x, y, d) {
         var ret, type, x2, y2;
         ret = _Game_CharacterBase_canPass.apply(this, arguments);
         type = this.vehicleType();
 
-        if(type) {
+        if (type) {
             ret = true;
             x2 = $gameMap.roundXWithDirection(x, d);
             y2 = $gameMap.roundYWithDirection(y, d);
 
-            if(type == "boat") {
+            if (type == "boat") {
                 ret = $gameMap.isBoatPassable(x2, y2);
-            } else if(type == "ship") {
+            } else if (type == "ship") {
                 ret = $gameMap.isShipPassable(x2, y2);
             } else {
                 if (!this.isMapPassable(x, y, d)) {
@@ -118,27 +120,27 @@ Imported.MKR_VehicleEvent = true;
         return ret;
     };
 
-    Game_CharacterBase.prototype.vehicleType = function() {
+    Game_CharacterBase.prototype.vehicleType = function () {
         var ret, ev, pattern, notes, cnt, n, i, match;
         ret = "";
         pattern = /<(boat|ship)>/i
 
-        if(this instanceof Game_Vehicle) {
+        if (this instanceof Game_Vehicle) {
             return this._type;
         }
-        if(this instanceof Game_Player || this instanceof Game_Follower) {
+        if (this instanceof Game_Player || this instanceof Game_Follower) {
             return "";
         }
         ev = this.event();
 
-        if(ev.note) {
+        if (ev.note) {
             notes = ev.note.toLowerCase().split(/ (?=<)/);
             cnt = notes.length;
 
-            for(i = 0; i < cnt; i++) {
+            for (i = 0; i < cnt; i++) {
                 n = notes[i].trim();
 
-                if(pattern.test(n)) {
+                if (pattern.test(n)) {
                     match = n.match(pattern);
                     ret = match[1];
                 }

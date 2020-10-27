@@ -17,6 +17,8 @@
 
 /*:
  *
+ * @target MZ MV
+ * @url https://raw.githubusercontent.com/munokura/MKR-MV-plugins/master/MKR_SkillFilter.js
  * @plugindesc (v1.0.1) 表示スキルフィルタープラグイン
  * @author マンカインド
  *
@@ -79,10 +81,10 @@
     //
     //=========================================================================
     var _Window_BattleSkill_includes = Window_BattleSkill.prototype.includes;
-    Window_BattleSkill.prototype.includes = function(item) {
+    Window_BattleSkill.prototype.includes = function (item) {
         var result;
         result = _Window_BattleSkill_includes.apply(this, arguments);
-        if(item && this._actor && result && !this._actor.isSkillWtypeOk(item)) {
+        if (item && this._actor && result && !this._actor.isSkillWtypeOk(item)) {
             result = false;
         }
         return result;
